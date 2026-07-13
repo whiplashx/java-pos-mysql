@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -19,5 +20,10 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
         return new ResponseEntity<List<User>>(userService.allUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<User>> getSingleUser(Long id){
+            return new ResponseEntity<Optional<User>>(userService.singleUser(id), HttpStatus.OK);
     }
 }

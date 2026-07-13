@@ -9,5 +9,4 @@ public class JavaPosSqlApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JavaPosSqlApplication.class, args);
 	}
-	
 }

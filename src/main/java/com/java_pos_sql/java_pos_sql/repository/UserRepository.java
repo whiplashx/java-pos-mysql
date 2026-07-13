@@ -3,6 +3,11 @@ package com.java_pos_sql.java_pos_sql.repository;
 import com.java_pos_sql.java_pos_sql.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User, Long> {
-    
+    @Override
+    Optional<User> findById(Long id);
+    Optional<User> findByEmail(String email);
 }
