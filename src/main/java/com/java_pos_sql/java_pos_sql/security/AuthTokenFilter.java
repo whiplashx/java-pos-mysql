@@ -20,6 +20,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     public static final String BEARER_ = "Bearer ";
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Override

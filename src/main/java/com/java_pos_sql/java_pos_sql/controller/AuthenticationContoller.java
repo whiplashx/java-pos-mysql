@@ -3,6 +3,8 @@ package com.java_pos_sql.java_pos_sql.controller;
 import com.java_pos_sql.java_pos_sql.model.User;
 import com.java_pos_sql.java_pos_sql.repository.UserRepository;
 import com.java_pos_sql.java_pos_sql.security.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,14 +14,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthenticationContoller {
 
-    private AuthenticationManager authenticationManager;
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private JwtUtil jwtUtil;
+
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+
+    @Autowired
+    public AuthenticationContoller(
+            AuthenticationManager authenticationManager,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtUtil jwtUtil
+    ){
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
 
     @PostMapping("/signin")
     public String authenticateUser(@RequestBody User user){
@@ -49,4 +66,10 @@ public class AuthenticationContoller {
         userRepository.save((newUser));
         return "User registered successfully!";
     }
+//
+//    @PostMapping("/signup")
+//    public String registerUser(@RequestBody User user){
+//        System.out.println("SIGNUP HIT");
+//    return "";
+//    }
 }
