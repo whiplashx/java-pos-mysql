@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class MainController {
 
-    @GetMapping
-    public String allAccess(){
-        return "Everyone Access!";
+    @GetMapping("/welcome")
+    public String allAccess() {
+        return "Everyone access";
     }
 
     @GetMapping("/user")
-    public String userAccess(){
+    public String userAccess() {
         return "User Content with JWT";
     }
 
     @GetMapping("/special")
-    public String specialAccess(){
-        return "Special Access with JWT";
+    public String specialAccess() {
+        return "Special access with JWT";
     }
 }
