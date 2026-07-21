@@ -1,17 +1,22 @@
 package com.java_pos_sql.java_pos_sql.controller;
 
+import com.java_pos_sql.java_pos_sql.model.LoginResponse;
 import com.java_pos_sql.java_pos_sql.model.User;
 import com.java_pos_sql.java_pos_sql.repository.UserRepository;
 import com.java_pos_sql.java_pos_sql.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -37,7 +42,7 @@ public class AuthenticationController {
 
 
     @PostMapping("/signin")
-    public String authenticateUser(@RequestBody User user) {
+    public ResponseEntity<LoginResponse> authenticateUser(@RequestBody User user) {
         Authentication authentication = authenticationManager.authenticate(
                 new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
                         user.getUsername(),
@@ -46,7 +51,21 @@ public class AuthenticationController {
         );
 
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtUtils.generateToken(userDetails.getUsername());
+        String token = jwtUtils.generateToken(userDetails.getUsername());
+
+        List<String> roles = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        LoginResponse response = new LoginResponse(
+                token,
+                "Bearer",
+                userDetails.getUsername(),
+                roles
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/signup")
